@@ -14,12 +14,12 @@ module.exports = {
         .findOne({
           where: { id: postId },
           include: [
-            { model: users, attributes: ["username"] },
+            { model: users, attributes: ["username", "picture"] },
           ],
         })
         .then((response) => {
           response
-            .update({ views: Number(response.views) + 1 })
+            .update({ views: response.views + 1 })
             .then((data) => {
               res.status(200).json(data.dataValues);
             });

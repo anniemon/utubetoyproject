@@ -13,7 +13,8 @@ const StyledMain = styled.main`
 
 const Container = styled.section`
   display: flex;
-`;
+}
+  `;
 
 const PlayerWrapper = styled.div`
   flex: 0 1 auto;
@@ -38,30 +39,33 @@ const StyledPlaylist = styled.div`
   }
 `;
 
-export default function Main({ videoInfo, handleClick, imgs }) {
+export default function Main({ videoInfo, handleClick, imgs, subscription, pageRefresh, setSubscription }) {
 
   return (
     <>
       <Container>
-        <StyledMain>
-          <PlayerWrapper>
-            <ReactPlayer
-              className="react-player"
-              width="100%"
-              height="100%"
-              controls
-              url={`http://localhost:4000/${videoInfo.video}`}
-              playing={true}
-            />
-          </PlayerWrapper>
-          <VideoInfo videoInfo={videoInfo} />
-        </StyledMain>
+        <div>
+          <StyledMain>
+            <PlayerWrapper>
+              <ReactPlayer
+                className="react-player"
+                width="100%"
+                height="100%"
+                controls
+                url={`http://localhost:4000/${videoInfo.video}`}
+                playing={true}
+              />
+            </PlayerWrapper>
+            <VideoInfo videoInfo={videoInfo} setSubscription={setSubscription} subscription={subscription} pageRefresh={pageRefresh} />
+          </StyledMain>
+          <Comments />
+        </div>
         <StyledPlaylist>
           {imgs.map((thumbnail) => (
             <Link to="/main" key={thumbnail.id} className="link">
               <Thumbnail
+                style={true}
                 key={thumbnail.id}
-                videoInfo={videoInfo}
                 thumbnail={thumbnail}
                 handleClick={handleClick}
               />
@@ -69,7 +73,6 @@ export default function Main({ videoInfo, handleClick, imgs }) {
           ))}
         </StyledPlaylist>
       </Container>
-      <Comments />
     </>
   );
 }

@@ -69,5 +69,22 @@ export const dummyData =
 			view: 0,
 			created_at: present
 		}
+	],
+	comment: [{
+		comment: "안녕하세요1",
+		created_at: present
+	},
+	{
+		comment: "안녕하세요2",
+		created_at: present
+	},
+	{
+		comment: "안녕하세요3",
+		created_at: present
+	},
+	{
+		comment: "안녕하세요4",
+		created_at: present
+	}
 	]
 }

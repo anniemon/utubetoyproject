@@ -23,6 +23,12 @@ const ContentInfo = styled.div`
 	border-width: 1px; */
   margin: 10px 0 0 10px;
   display: flex;
+  img {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    border-radius: 100%;
+  }
   .info {
     margin-left: 10px;
     font-size: 13px;
@@ -34,11 +40,10 @@ const ContentInfo = styled.div`
   }
 `;
 
-export default function Thumbnail({ thumbnail, handleClick, videoInfo }) {
-  console.log(thumbnail);
+export default function Thumbnail({ thumbnail, handleClick, style }) {
   return (
     <ThumbnailBox
-      className={videoInfo ? "main" : null}
+      className={style ? "main" : null}
       onClick={() => {
         handleClick(thumbnail);
       }}
@@ -46,10 +51,10 @@ export default function Thumbnail({ thumbnail, handleClick, videoInfo }) {
       <img
         src={`http://localhost:4000/${thumbnail.image}`}
         alt={thumbnail.title}
-        className={videoInfo ? "main" : null}
+        className={style ? "main" : null}
       />
       <ContentInfo>
-        <div>프로필마크</div>
+        <img src={thumbnail.user.picture} alt="프로필 마크"></img>
         <div className="info">
           <div className="info_name">{thumbnail.title}</div>
           <div>{thumbnail.user.username}</div>

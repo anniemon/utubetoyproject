@@ -32,6 +32,7 @@ const Img = styled.img`
 `;
 
 export default function Header({ pageRefresh }) {
+
   return (
     <HeadBox>
       <Link to="/" className="head left" onClick={pageRefresh}>

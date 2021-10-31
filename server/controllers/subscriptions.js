@@ -3,8 +3,8 @@ const { posts, users, subscriptions } = require("../models");
 module.exports = {
   post: async (req, res) => {
     //사용자가 users 1번 John이라는 가정.
-    username = req.body.username;
-    subscribername = req.body.subscribername;
+    const username = req.body.username;
+    const subscribername = req.body.subscribername;
     //유저 아이디를 받아왔으니 이제 유저 아이디로 유저를 찾는다
     //유저가 이미 있다면 구독 중! 없으면 subscription에 넣어준다.
 
@@ -12,7 +12,6 @@ module.exports = {
     //   where: { id: username },
     //   include: [{ model: users, attributes: ["userId"] }],
     // });
-
     const subscriber = await subscriptions.findOne({
       where: { subscriberId: subscribername, userId: username },
       //   include: [{ model: users, attributes: ["subscriberId"] }],
@@ -26,13 +25,15 @@ module.exports = {
         userId: 1,
         subscriberId: subscribername,
       });
-      res.status(200).send({ message: "구독 완료!" });
+      res.status(200).send({ data: subscribername, message: "구독 완료!" });
+
     } else {
-      res.status(400).send({ message: "Can Not Subscribe" });
+      res.status(404).send({ message: "Can Not Subscribe" });
     }
   },
 
   delete: async (req, res) => {
+    console.log('!!!!!!!!', req.body);
     username = req.body.username;
     subscribername = req.body.subscribername;
 
@@ -47,23 +48,23 @@ module.exports = {
     subscriptions.destroy({
       where: { userId: 1, subscriberId: subscribername },
     });
-    res.status(200).send({ message: "구독 취소!!" });
+    res.status(200).send({ data: subscribername, message: "구독 취소!!" });
   },
 
-  get: async (req, res) => {
+  get: (req, res) => {
     //흐름 posts도 userId(2,3,4)를 담고있다.
     //posts에서 (2,3,4)
     const userId = req.params.userId;
 
-    const result = await subscriptions.findAll({
-      //include: [{ model: subscriptions, where: { id: subscriberId } }],
-      attributes: ["subscriberId"],
-    });
-    const user = await users.findAll({
-      where: { id: result },
-    });
+    subscriptions.findAll({
+      where: { userId: userId },
+    })
+      .then(response => {
+        res.status(200).json(response)
+      })
+    //console.log('~~~~~~~~~~~', result);
     //console.log("----------", user);
-    res.status(200).json(result);
+    // res.status(200).json(result);
     //res.status(200).json(result);
 
     // const user = await posts.findAll({

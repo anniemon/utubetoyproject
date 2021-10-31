@@ -15,7 +15,7 @@ module.exports = {
         type: Sequelize.STRING,
       },
       total_likes: {
-        type: Sequelize.STRING,
+        type: Sequelize.INTEGER,
         defaultValue: 0,
       },
       views: {

@@ -31,6 +31,12 @@ const ContentInfo = styled.div`
   margin: 10px 0 0 10px;
   display: flex;
   align-items: center;
+  img {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    border-radius: 100%;
+  }
   .info {
     margin-left: 10px;
     font-size: 13px;
@@ -53,13 +59,13 @@ const unSubscribe = styled(Like)`
   color: white;
 `;
 
-function VideoInfo({ videoInfo }) {
-  const [subscribed, setSubscribed] = useState(false);
+function VideoInfo({ videoInfo, subscription, pageRefresh, setSubscription }) {
+  const [subscriptionIds, setSubscriptionIds] = useState(subscription.map(x => x.subscriberId));
 
-  // console.log(videoInfo.userId);
   const handleSubscription = () => {
-    if (subscribed) {
+    if (subscriptionIds.includes(videoInfo.userId)) {
       //구독 취소
+
       axios
         .post(
           "http://localhost:4000/subscriptions/delete",
@@ -72,7 +78,8 @@ function VideoInfo({ videoInfo }) {
         .then((res) => {
           alert(res.data.message);
           console.log(res.data);
-          setSubscribed(!subscribed);
+          const rest = subscriptionIds.filter(id => id !== res.data.data);
+          setSubscriptionIds(rest)
         })
         .catch((err) => alert(err));
     } else {
@@ -90,17 +97,17 @@ function VideoInfo({ videoInfo }) {
           // console.log("-----", res.data);
           alert(res.data.message);
           console.log(res.data);
-          setSubscribed(!subscribed);
+          setSubscriptionIds([...subscriptionIds, res.data.data]);
         })
         .catch((err) => alert(err));
     }
+    pageRefresh();
   };
 
   return (
     <div>
       <ContentInfo>
-        {/* 프로필마크 twittler 스프린트에서 따오기 */}
-        <div>프로필마크</div>
+        <img src={videoInfo.user.picture} alt="프로필 마크"></img>
         <div className="info">
           <div className="info_name">{videoInfo.title}</div>
           <div>{videoInfo.user.username}</div>
@@ -117,10 +124,10 @@ function VideoInfo({ videoInfo }) {
 
         {/* 실험용 버튼 */}
         <button
-          style={{ backgroundColor: `${subscribed ? "#808080" : "#ff0000"}` }}
           onClick={handleSubscription}
+          style={{ backgroundColor: `${subscriptionIds.includes(videoInfo.userId) ? "#808080" : "#ff0000"}` }}
         >
-          {subscribed ? "구독중" : "구독"}
+          {subscriptionIds.includes(videoInfo.userId) ? "구독중" : "구독"}
         </button>
         {/* 나중에 주석풀기 */}
         {/* <Subscribe subscribe onClick={handleSubscription}>

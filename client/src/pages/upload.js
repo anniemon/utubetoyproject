@@ -3,6 +3,7 @@ import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 import { useDropzone } from "react-dropzone";
 import axios from "axios";
+import Footer from "../components/Footer";
 
 const Wrap = styled.div`
   min-height: 100vh;
@@ -71,38 +72,39 @@ export default function Upload({ pageRefresh }) {
       let file = acceptedFiles[0];
       if (!file.type.includes("video")) alert("비디오 파일만 업로드하세요.");
       else {
-        isTitle(acceptedFiles[0].name);
-
-        // 서버에 동영상 저장요청
-        const formData = new FormData();
-        formData.append("upload", file);
-        const config = {
-          header: { "content-type": "multipart/form-data" },
-        };
-        axios
-          .post(`http://localhost:4000/upload`, formData, config)
-          .then((response) => {
-            if (response.data.success) {
-              // console.log(response.data);
-              setFilePath(response.data.url);
-              const payload = {
-                url: response.data.url,
-                fileName: response.data.fileName,
-              };
-              axios
-                .post(`http://localhost:4000/thumbnail`, payload)
-                .then((response) => {
-                  console.log(response.data);
-                  if (response.data.success) {
-                    isThumbnail(response.data.url);
-                  } else {
-                    alert("썸네일 생성에 실패했습니다.");
-                  }
-                });
-            } else {
-              alert("비디오 업로드에 실패했습니다.");
-            }
-          });
+        if (window.confirm("업로드할 영상이 맞나요?")) {
+          isTitle(acceptedFiles[0].name);
+          // 서버에 동영상 저장요청
+          const formData = new FormData();
+          formData.append("upload", file);
+          const config = {
+            header: { "content-type": "multipart/form-data" },
+          };
+          axios
+            .post(`http://localhost:4000/upload`, formData, config)
+            .then((response) => {
+              if (response.data.success) {
+                // console.log(response.data);
+                setFilePath(response.data.url);
+                const payload = {
+                  url: response.data.url,
+                  fileName: response.data.fileName,
+                };
+                axios
+                  .post(`http://localhost:4000/thumbnail`, payload)
+                  .then((response) => {
+                    console.log(response.data);
+                    if (response.data.success) {
+                      isThumbnail(response.data.url);
+                    } else {
+                      alert("썸네일 생성에 실패했습니다.");
+                    }
+                  });
+              } else {
+                alert("비디오 업로드에 실패했습니다.");
+              }
+            });
+        }
       }
     }
     /*{업로드시 썸네일 사진을 만드는 부분}*/
@@ -128,17 +130,19 @@ export default function Upload({ pageRefresh }) {
       filePath: filePath,
       description: description,
     };
-    axios
-      .post(`http://localhost:4000/upload/file`, payload)
-      .then((response) => {
-        if (response.data.success) {
-          console.log(response.data);
-          pageRefresh();
-          history.push("/");
-        } else {
-          console.log("업로드 실패");
-        }
-      });
+    if (thumbnail) {
+      axios
+        .post(`http://localhost:4000/upload/file`, payload)
+        .then((response) => {
+          if (response.data.success) {
+            console.log(response.data);
+            pageRefresh();
+            history.push("/");
+          } else {
+            console.log("업로드 실패");
+          }
+        });
+    }
   };
 
   return (

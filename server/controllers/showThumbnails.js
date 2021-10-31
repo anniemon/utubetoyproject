@@ -16,7 +16,7 @@ module.exports = {
     // const result = await posts.findOne({ where: { user_id: 1 } });
     // console.log("%%%%%%%%", result);
     const result = await posts.findAll({
-      include: [{ model: users, attributes: ["username"] }],
+      include: [{ model: users, attributes: ["username", "picture"] }],
     });
     // console.log("----------", result);
     res.status(200).json(result);
