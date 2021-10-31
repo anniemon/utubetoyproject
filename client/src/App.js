@@ -23,15 +23,11 @@ function App() {
   const [imgs, setImgs] = useState([]);
   const [imgs_, setImgs_] = useState([]);
   const handleClick = (ThumbnailInfo) => {
-<<<<<<< HEAD
-      axios
-=======
-    const imgs_one = imgs.filter(img => img.id !== ThumbnailInfo.id)
+    const imgs_one = imgs.filter((img) => img.id !== ThumbnailInfo.id);
 
     setImgs_(imgs_one);
 
     axios
->>>>>>> a251bddc2663de5365613ce97939f169d3129bde
       .get(`http://localhost:4000/play/${ThumbnailInfo.id}`, {
         "Content-Type": "application/json",
         withCredentials: true,
@@ -41,53 +37,24 @@ function App() {
         setVideoInfo(res.data);
       })
       .catch((err) => alert(err));
-<<<<<<< HEAD
   };
-=======
-  }
->>>>>>> a251bddc2663de5365613ce97939f169d3129bde
 
   const pageRefresh = () => {
     axios
       .get("http://localhost:4000/", { withCredentials: true })
       .then((res) => {
-<<<<<<< HEAD
-        console.log(res.data)
-=======
         console.log(res.data);
->>>>>>> a251bddc2663de5365613ce97939f169d3129bde
         setImgs(res.data);
       })
       .catch((err) => alert(err));
-  }
+  };
 
   useEffect(() => {
     pageRefresh();
   }, [videoInfo]);
 
-
   return (
     <BrowserRouter>
-<<<<<<< HEAD
-      <Wrap>
-        <Header />
-        <Switch>
-          <Route exact path="/">
-            <PlayList imgs={imgs} handleClick={handleClick} />
-          </Route>
-          <Route path="/main">
-            <Main videoInfo={videoInfo} imgs={imgs} handleClick={handleClick} />
-          </Route>
-          <Route path="/subscriptions">
-            <Subscriptions imgs={imgs} handleClick={handleClick} />
-          </Route>
-          <Route path="/upload">
-            <Upload />
-          </Route>
-        </Switch>
-        <Footer/>
-      </Wrap>
-=======
       <Header pageRefresh={pageRefresh} />
       <Switch>
         <Route exact path="/">
@@ -103,7 +70,6 @@ function App() {
           <Upload pageRefresh={pageRefresh} />
         </Route>
       </Switch>
->>>>>>> a251bddc2663de5365613ce97939f169d3129bde
     </BrowserRouter>
   );
 }
